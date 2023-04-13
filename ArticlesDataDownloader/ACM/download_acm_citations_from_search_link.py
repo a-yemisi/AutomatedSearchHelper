@@ -16,7 +16,7 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
         output_filename = os.path.join(output_directory, 'acm_auto_search_' + str(page_no) + '.bib')
 
         select_all_checkbox = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@class='item-results__checkbox']"))
+            lambda x: x.find_element("xpath","//div[@class='item-results__checkbox']"))
 
 
         desired_y = (select_all_checkbox.size['height'] / 2) + select_all_checkbox.location['y']
@@ -29,19 +29,19 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
         select_all_checkbox.click()
 
         export_popup = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//i[@class='icon-export']"))
+            lambda x: x.find_element("xpath","//i[@class='icon-export']"))
         export_popup.click()
 
         WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@class='csl-right-inline']"))
+            lambda x: x.find_element("xpath","//div[@class='csl-right-inline']"))
 
         WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[@title='Download citation']/i[@class='icon-Icon_Download']"))
+            lambda x: x.find_element("xpath","//a[@title='Download citation']/i[@class='icon-Icon_Download']"))
 
         time.sleep(3)
 
         bib_entries = WebDriverWait(driver, 10).until(
-            lambda x: x.find_elements_by_xpath("//div[@class='csl-right-inline']"))
+            lambda x: x.find_elements("xpath","//div[@class='csl-right-inline']"))
 
         result = str()
         for entry in bib_entries:
@@ -52,19 +52,19 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
 
 
         # download_button = WebDriverWait(driver, 10).until(
-        #     lambda x: x.find_element_by_xpath("//a[@title='Download citation']"))
+        #     lambda x: x.find_element("xpath","//a[@title='Download citation']"))
         #
         # file = download_file_from_click_of_button(driver, download_button)
         # if file:
         #     shutil.move(file, output_filename)
 
         cancel_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@class='modal__header']/button[@class='close']"))
+            lambda x: x.find_element("xpath","//div[@class='modal__header']/button[@class='close']"))
         cancel_button.click()
 
         try:
             next_page_button = WebDriverWait(driver, 10).until(
-                lambda x: x.find_element_by_xpath("//a[@class='pagination__btn--next']"))
+                lambda x: x.find_element("xpath","//a[@class='pagination__btn--next']"))
             link = next_page_button.get_attribute('href')
             driver.get(link)
         except:

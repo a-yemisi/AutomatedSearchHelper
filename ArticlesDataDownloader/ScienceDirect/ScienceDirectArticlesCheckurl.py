@@ -1,5 +1,5 @@
 ## AKA_Feb22: edit
-## //TODO: Selenium methods to be updated - such as find_element_by_id | find_element_by_xpath
+## //TODO: Selenium methods to be updated - such as find_element_by_id | find_element
 
 ## Load libraries
 import shutil
@@ -37,9 +37,9 @@ def loggedin_ready(x=driver, e_locator):
         ##AKA_Feb22: print test
         print(f'try article_ready in ScienceDirectArticlesHandler ... element "body"')
         ##x.find_element_by_id("body")
-        x.find_element(By.CLASS_NAME, e_locator)
+        x.find_element("xpath",By.CLASS_NAME, e_locator)
         found = True
-        print(f' In loggedin_ready, {e_locator} value: {x.find_element(By.CLASS_NAME, e_locator).text}')
+        print(f' In loggedin_ready, {e_locator} value: {x.find_element("xpath",By.CLASS_NAME, e_locator).text}')
     except NoSuchElementException:
         print (f'No Such Element: {e_locator}')
         return False
@@ -160,7 +160,7 @@ def check_linkpage(driver, link, output_dir):
 '''
 def isElementPresent(driver, e_locator):
     try:
-        driver.find_element(By.CLASS_NAME, e_locator)
+        driver.find_element("xpath",By.CLASS_NAME, e_locator)
     except NoSuchElementException:
         print (f'No Such Element: {e_locator}')
         return False
@@ -170,7 +170,7 @@ def catch_isElementPresent(driver, e_locator):
     print(f'entering catch_isElementPresent | driver is {driver} | element is {e_locator}')
     try:
         if isElementPresent(driver, e_locator):
-            catch_isElementPresent.e_locator_text = driver.find_element(By.CLASS_NAME, e_locator).text
+            catch_isElementPresent.e_locator_text = driver.find_element("xpath",By.CLASS_NAME, e_locator).text
             print(f' In catch_isElementPresent, {e_locator} value: {catch_isElementPresent.e_locator_text}')
             ##break
 
@@ -207,16 +207,16 @@ class ScienceDirectArticlesCheckurl():
         '''
 
         WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@id='popover-trigger-export-citation-popover']/button/span"))
+            lambda x: x.find_element("xpath","//div[@id='popover-trigger-export-citation-popover']/button/span"))
 
         export_button = WebDriverWait(self.driver, 15).until(
-            lambda x: x.find_element_by_xpath("//div[@id='popover-trigger-export-citation-popover']/button"))
+            lambda x: x.find_element("xpath","//div[@id='popover-trigger-export-citation-popover']/button"))
         time.sleep(1)
         export_button.click()
 
 
         ris_download_button = WebDriverWait(self.driver, 15).until(
-            lambda x: x.find_element_by_xpath("//button[@aria-label='ris']"))
+            lambda x: x.find_element("xpath","//button[@aria-label='ris']"))
 
         ris_download_button.click()
         time.sleep(1) # wait until download initiated
@@ -232,7 +232,7 @@ class ScienceDirectArticlesCheckurl():
             self.driver.get(url)
             self.__logger.debug("Called get for  " + url)
             WebDriverWait(self.driver, 15).until(
-                lambda x: x.find_element_by_xpath("//section[contains(@id, 'sec')]"))
+                lambda x: x.find_element("xpath","//section[contains(@id, 'sec')]"))
             result_data.merge(ArticleData(text=science_direct_html_to_json(self.driver.page_source)))
             result_data.read_status = 'OK'
         except Exception as error:

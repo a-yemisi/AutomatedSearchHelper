@@ -26,30 +26,30 @@ class IEEEArticlesHandler:
 
         try:
             WebDriverWait(self.driver, 10).until(
-                lambda x: x.find_element_by_xpath("//div/strong[contains(text(), 'Abstract')]"))
+                lambda x: x.find_element("xpath","//div/strong[contains(text(), 'Abstract')]"))
             WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_id("article"))
         except:
             pass
 
         cite_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//button[contains(text(), 'Cite This') and contains(@class, 'cite-this-btn')]"))
+            lambda x: x.find_element("xpath","//button[contains(text(), 'Cite This') and contains(@class, 'cite-this-btn')]"))
         cite_button.click()
 
         time.sleep(0.2)
 
 
         ris_tab = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[contains(text(), 'RIS') and @class='document-tab-link']"))
+            lambda x: x.find_element("xpath","//a[contains(text(), 'RIS') and @class='document-tab-link']"))
         time.sleep(0.2)
         ris_tab.click()
 
         enable_abstract_checkbox = WebDriverWait(self.driver, 10).until(
-            lambda x:  self.driver.find_element_by_xpath("//div[@class='enable-abstract']/input[@type='checkbox']"))
+            lambda x:  self.driver.find_element("xpath","//div[@class='enable-abstract']/input[@type='checkbox']"))
         time.sleep(0.2)
         enable_abstract_checkbox.click()
 
         ris_text = WebDriverWait(self.driver, 20).until(
-            lambda x:  self.driver.find_element_by_xpath("//pre[@class='text ris-text']"))
+            lambda x:  self.driver.find_element("xpath","//pre[@class='text ris-text']"))
 
         result_data.merge(ris_text_to_article_data(ris_text.get_attribute('innerHTML')))
 

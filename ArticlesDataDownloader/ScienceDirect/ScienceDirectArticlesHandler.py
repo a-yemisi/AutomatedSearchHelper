@@ -1,5 +1,5 @@
 ## AKA_Feb22: edit
-## //TODO: Selenium methods to be updated - such as find_element_by_id | find_element_by_xpath
+## //TODO: Selenium methods to be updated - such as find_element_by_id | find_element
 
 ## Load libraries
 import shutil
@@ -61,16 +61,16 @@ class ScienceDirectArticlesHandler():
         time.sleep(time_wait)
 
         WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@id='popover-trigger-export-citation-popover']/button/span"))
+            lambda x: x.find_element("xpath","//div[@id='popover-trigger-export-citation-popover']/button/span"))
 
         export_button = WebDriverWait(self.driver, 15).until(
-            lambda x: x.find_element_by_xpath("//div[@id='popover-trigger-export-citation-popover']/button"))
+            lambda x: x.find_element("xpath","//div[@id='popover-trigger-export-citation-popover']/button"))
         time.sleep(1)
         export_button.click()
 
 
         ris_download_button = WebDriverWait(self.driver, 15).until(
-            lambda x: x.find_element_by_xpath("//button[@aria-label='ris']"))
+            lambda x: x.find_element("xpath","//button[@aria-label='ris']"))
 
         ris_download_button.click()
         time.sleep(1) # wait until download initiated
@@ -86,7 +86,7 @@ class ScienceDirectArticlesHandler():
             self.driver.get(url)
             self.__logger.debug("Called get for  " + url)
             WebDriverWait(self.driver, 15).until(
-                lambda x: x.find_element_by_xpath("//section[contains(@id, 'sec')]"))
+                lambda x: x.find_element("xpath","//section[contains(@id, 'sec')]"))
             result_data.merge(ArticleData(text=science_direct_html_to_json(self.driver.page_source)))
             result_data.read_status = 'OK'
         except Exception as error:

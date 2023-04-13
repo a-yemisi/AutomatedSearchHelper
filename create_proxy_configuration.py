@@ -64,7 +64,7 @@ def create_proxy_configuration(login, password, pac_script, output):
     with zipfile.ZipFile(output, 'w') as zp:
         zp.writestr("manifest.json", manifest_json)
         zp.writestr("background.js", background_js % (pac_script, login, password))
-
+##      ???
 
 def getArgumentsParser():
     parser = argparse.ArgumentParser(description=__doc__, add_help=True)

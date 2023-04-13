@@ -22,9 +22,9 @@ class ACMArticlesHandler:
         text = str()
         try:
             WebDriverWait(self.driver, 10).until(
-                lambda x: x.find_element_by_xpath("//div[contains(@class, 'abstractSection abstractInFull')]"))
+                lambda x: x.find_element("xpath","//div[contains(@class, 'abstractSection abstractInFull')]"))
             abstract_paragraphs = WebDriverWait(self.driver, 10).until(
-                lambda x: x.find_elements_by_xpath("//div[contains(@class, 'abstractSection abstractInFull')]/p"))
+                lambda x: x.find_element("xpath","//div[contains(@class, 'abstractSection abstractInFull')]/p"))
             text = [dict(title='Abstract', paragraphs=[
                 dict(sentences=format_text_and_split_into_sentences(
                     par.get_attribute('innerHTML'))) for par in abstract_paragraphs])]
@@ -34,7 +34,7 @@ class ACMArticlesHandler:
         result = ArticleData(publisher_link=url, text=text, read_status='Full text not avaliable')
 
         cite_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[@data-title='Export Citation']"))
+            lambda x: x.find_element("xpath","//a[@data-title='Export Citation']"))
 
         desired_y = (cite_button.size['height'] / 2) + cite_button.location['y']
         window_h = self.driver.execute_script('return window.innerHeight')
@@ -47,13 +47,13 @@ class ACMArticlesHandler:
         cite_button.click()
 
         WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@class='csl-right-inline']"))
+            lambda x: x.find_element("xpath","//div[@class='csl-right-inline']"))
 
         WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[@title='Download citation']/i[@class='icon-Icon_Download']"))
+            lambda x: x.find_element("xpath","//a[@title='Download citation']/i[@class='icon-Icon_Download']"))
 
         download_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[@title='Download citation']"))
+            lambda x: x.find_element("xpath","//a[@title='Download citation']"))
 
         downloaded_bibs = download_file_from_click_of_button(self.driver, download_button)
         if downloaded_bibs:
@@ -71,9 +71,9 @@ class ACMArticlesHandler:
         try:
             self.__logger.debug("ACM::download_pdf start " + url)
             self.driver.get(url)
-            WebDriverWait(self.driver, 10).until(lambda x: x.find_elements_by_xpath("//a[@title='PDF']"))
+            WebDriverWait(self.driver, 10).until(lambda x: x.find_elements("xpath","//a[@title='PDF']"))
             self.__logger.info("Wait end")
-            python_button = self.driver.find_elements_by_xpath("//a[@title='PDF']")[0]
+            python_button = self.driver.find_elements("xpath","//a[@title='PDF']")[0]
             link = str(python_button.get_property('href'))
             PDF_FILENAME = 'ACM_temporary.pdf'
             return download_pdf(self.driver, link, PDF_FILENAME)

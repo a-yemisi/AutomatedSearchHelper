@@ -14,7 +14,7 @@ def download_citations_from_search_link(driver, link, output_directory, output_n
     for page_no in range(1, MAX_PAGES + 1):
         time.sleep(2)
         export_citations_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//i[@class='icon-quote']"))
+            lambda x: x.find_element("xpath","//i[@class='icon-quote']"))
         export_citations_button.click()
 
         time.sleep(1)
@@ -33,15 +33,15 @@ def download_citations_from_search_link(driver, link, output_directory, output_n
 
 
         next_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//button[text()='Next']"))
+            lambda x: x.find_element("xpath","//button[text()='Next']"))
         next_button.click()
 
         ris_option = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//span[text()='BibTex']"))
+            lambda x: x.find_element("xpath","//span[text()='BibTex']"))
         ris_option.click()
 
         export_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//button[text()='Export']"))
+            lambda x: x.find_element("xpath","//button[text()='Export']"))
 
         file = download_file_from_click_of_button(driver, export_button)
         output_filename = output_directory + '/' + output_name_base + '_' + str(page_no) + '.bib'
@@ -49,12 +49,12 @@ def download_citations_from_search_link(driver, link, output_directory, output_n
             shutil.move(file, output_filename)
 
         cancel_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@id='exportCitation']/div/div/button/i[@class='icon-close_thin']"))
+            lambda x: x.find_element("xpath","//div[@id='exportCitation']/div/div/button/i[@class='icon-close_thin']"))
         cancel_button.click()
 
         try:
             next_page_button = WebDriverWait(driver, 10).until(
-                lambda x: x.find_element_by_xpath("//a[@aria-label='Next page link']"))
+                lambda x: x.find_element("xpath","//a[@aria-label='Next page link']"))
             next_page_button.click()
         except:
             break

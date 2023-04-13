@@ -9,4 +9,8 @@ class ArticleStatus(IntEnum):
     NO_ACCESS_TO_ARTICLE = 5,
     READ_FROM_PDF_NO_FINDINGS = 6,
     READ_CORRECT_NO_FINDINGS = 7,
-    ARTICLE_IGNORED = 8
+    ARTICLE_IGNORED = 8,
+    ACCEPTED = 9,
+    DECLINED = 10,
+    PENDING = 11
+

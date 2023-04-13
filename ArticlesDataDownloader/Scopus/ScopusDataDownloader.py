@@ -27,7 +27,7 @@ class ScopusDataDownloader:
         self._driver.get(link)
 
         WebDriverWait(self._driver, 10).until(
-            lambda x: self._driver.find_element_by_xpath("//section[@id='abstractSection']"))
+            lambda x: self._driver.find_element("xpath","//section[@id='abstractSection']"))
 
         result = prepare_default(link)
         self._logger.info("Got link preparin soap")

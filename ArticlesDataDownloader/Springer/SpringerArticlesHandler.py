@@ -30,7 +30,7 @@ class SpringerArticlesHandler():
     def __get_article_data_from_chapter(self):
         self.__logger.info('Analyzing article as chapter')
         download_citation_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[contains(@data-track-label, 'RIS')]"))
+            lambda x: x.find_element("xpath","//a[contains(@data-track-label, 'RIS')]"))
         citation_link = download_citation_button.get_attribute('href')
         self.__logger.info('Got link to ris ' + citation_link)
         downloaded_file = download_file_from_link_that_initiates_download(self.driver, citation_link)
@@ -39,7 +39,7 @@ class SpringerArticlesHandler():
     def __get_article_data_from_article(self):
         self.__logger.info('Analyzing article as articles')
         download_citation_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[contains(@data-track-action, 'download article citation')]"))
+            lambda x: x.find_element("xpath","//a[contains(@data-track-action, 'download article citation')]"))
         citation_link = download_citation_button.get_attribute('href')
         self.__logger.info('Got link to ris ' + citation_link)
         downloaded_file = download_file_from_link_that_initiates_download(self.driver, citation_link)
@@ -85,13 +85,13 @@ class SpringerArticlesHandler():
             if '/chapter/' in self.driver.current_url:
                 self.__logger.info('Trying to get pdf from chapter')
                 download_pdf_button = WebDriverWait(self.driver, 10).until(
-                    lambda x: x.find_element_by_xpath("//a[contains(@data-track-action, 'Pdf download')]"))
+                    lambda x: x.find_element("xpath","//a[contains(@data-track-action, 'Pdf download')]"))
                 pdf_link = download_pdf_button.get_attribute('href')
                 return download_file_from_link_that_initiates_download(self.driver, pdf_link)
             elif '/article' in self.driver.current_url:
                 self.__logger.info('Trying to get pdf from chapter')
                 download_pdf_button = WebDriverWait(self.driver, 10).until(
-                    lambda x: x.find_element_by_xpath("//a[contains(@class, 'c-pdf-download__link')]"))
+                    lambda x: x.find_element("xpath","//a[contains(@class, 'c-pdf-download__link')]"))
                 pdf_link = download_pdf_button.get_attribute('href')
                 return download_file_from_link_that_initiates_download(self.driver, pdf_link)
             else:

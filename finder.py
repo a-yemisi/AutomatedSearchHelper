@@ -22,11 +22,11 @@ finder = AND(
                 EXACT_WORD("digital transformation", caseSensitive = False)
                 )))
         
-        '''
+'''
         AND(EXACT_WORD("digital technology", caseSensitive = False), OR(EXACT_WORD("digital technologies", caseSensitive = False)), AND(PARTIAL_WORD("define"), AND(EXACT_WORD("digital transformation", caseSensitive = False))))
         '''
         
-        '''
+'''
         finder = AND(
     PARTIAL_WORD("define"),
     AND(

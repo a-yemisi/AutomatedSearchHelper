@@ -18,7 +18,7 @@ class WilleyArticlesHandler:
     def __get_reference_text_with_given_radio_type(self, url, reference_radio_name):
         self.driver.get(url)
         tools_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[@class='article-tools__ctrl']"))
+            lambda x: x.find_element("xpath","//a[@class='article-tools__ctrl']"))
         tools_button.click()
 
         list_buttons = WebDriverWait(self.driver, 10).until(
@@ -38,9 +38,9 @@ class WilleyArticlesHandler:
         indirect_radio = [x for x in radio_labels if 'Indirect import' in x.get_attribute('innerHTML')][0]
         indirect_radio.click()
         download_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//input[@value='Download']"))
+            lambda x: x.find_element("xpath","//input[@value='Download']"))
         download_button.click()
-        pre = WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_xpath("//pre"))
+        pre = WebDriverWait(self.driver, 10).until(lambda x: x.find_element("xpath","//pre"))
         return pre.get_attribute('innerHTML')
 
     def __try_reading_data_from_ris(self, url):

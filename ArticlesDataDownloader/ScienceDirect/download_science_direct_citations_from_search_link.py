@@ -46,10 +46,10 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
         time.sleep(9)  ##(9)
         
         select_all_checkbox = WebDriverWait(driver, time_wait).until(
-            lambda x: x.find_element_by_xpath("//label[@for='select-all-results']/span"))
+            lambda x: x.find_element("xpath","//label[@for='select-all-results']/span"))
         '''
         ##select_all_checkbox = WebDriverWait(driver, time_wait).until(
-            lambda x: x.find_element(By.XPATH, "element_xpath")("//label[@for='select-all-results']/span"))
+            lambda x: x.find_element("xpath",By.XPATH, "element_xpath")("//label[@for='select-all-results']/span"))
         print(f'download_..._search_Link: selecting all checkbox')
         '''
         ## Refer bottom for XPATH
@@ -67,11 +67,11 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
         ##print(f'download_.._search_Link: selected {str(select_all_checkbox.click().value)}')
 
         export_button = WebDriverWait(driver, time_wait).until(
-            lambda x: x.find_element_by_xpath("//span[@class='export-all-link-text']"))
+            lambda x: x.find_element("xpath","//span[@class='export-all-link-text']"))
         export_button.click()
 
         ris_button = WebDriverWait(driver, time_wait).until(
-            lambda x: x.find_element_by_xpath("//span[contains(text(),'Export citation to RIS')]"))
+            lambda x: x.find_element("xpath","//span[contains(text(),'Export citation to RIS')]"))
 
         file = download_file_from_click_of_button(driver, ris_button)
         if file:
@@ -79,7 +79,7 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
 
         try:
             next_page_button = WebDriverWait(driver, time_wait).until(
-                lambda x: x.find_element_by_xpath("//a[@data-aa-name='srp-next-page']"))
+                lambda x: x.find_element("xpath","//a[@data-aa-name='srp-next-page']"))
             link = next_page_button.get_attribute('href')
             driver.get(link)
         except:
@@ -89,7 +89,7 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
         output_filename = os.path.join(output_directory, 'science_direct_auto_' + str(page_no) + '.ris')
 
         select_all_checkbox = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//label[@for='select-all-results']/span"))
+            lambda x: x.find_element("xpath","//label[@for='select-all-results']/span"))
 
 
         desired_y = (select_all_checkbox.size['height'] / 2) + select_all_checkbox.location['y']
@@ -102,11 +102,11 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
         select_all_checkbox.click()
 
         export_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//span[@class='export-all-link-text']"))
+            lambda x: x.find_element("xpath","//span[@class='export-all-link-text']"))
         export_button.click()
 
         ris_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//span[contains(text(),'Export citation to RIS')]"))
+            lambda x: x.find_element("xpath","//span[contains(text(),'Export citation to RIS')]"))
 
         file = download_file_from_click_of_button(driver, ris_button)
         if file:
@@ -114,7 +114,7 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
 
         try:
             next_page_button = WebDriverWait(driver, 10).until(
-                lambda x: x.find_element_by_xpath("//a[@data-aa-name='srp-next-page']"))
+                lambda x: x.find_element("xpath","//a[@data-aa-name='srp-next-page']"))
             link = next_page_button.get_attribute('href')
             driver.get(link)
         except:
@@ -281,7 +281,7 @@ def check_linkpage(driver, link, output_dir):
 '''
 def isElementPresent(driver, e_locator):
     try:
-        driver.find_element(By.CLASS_NAME, e_locator)
+        driver.find_element("xpath",By.CLASS_NAME, e_locator)
     except NoSuchElementException:
         print (f'No Such Element: {e_locator}')
         return False
@@ -291,7 +291,7 @@ def catch_isElementPresent(driver, e_locator):
     print(f'entering catch_isElementPresent | driver is {driver} | element is {e_locator}')
     try:
         if isElementPresent(driver, e_locator):
-            catch_isElementPresent.e_locator_text = driver.find_element(By.CLASS_NAME, e_locator).text
+            catch_isElementPresent.e_locator_text = driver.find_element("xpath",By.CLASS_NAME, e_locator).text
             print(f' In catch_isElementPresent, {e_locator} value: {catch_isElementPresent.e_locator_text}')
             ##break
 
@@ -351,9 +351,9 @@ if __name__ == '__main__':
         
 '''
         Using xpath:
-        element = find_element_by_xpath("element_xpath")
+        element = find_element("element_xpath")
         Needs be replaced with:
-        element = driver.find_element(By.XPATH, "element_xpath")
+        element = driver.find_element("xpath",By.XPATH, "element_xpath")
         
         Deprecation Warning: find_element_by_* commands are deprecated. Please use find_element() instead         https://stackoverflow.com/questions/69875125/find-element-by-commands-are-deprecated-in-selenium
         
@@ -365,40 +365,40 @@ if __name__ == '__main__':
         Using class_name:
         button = driver.find_element_by_class_name("quiz_button")
         Needs be replaced with:
-        button = driver.find_element(By.CLASS_NAME, "quiz_button")
+        button = driver.find_element("xpath",By.CLASS_NAME, "quiz_button")
 
         Using id:
         element = find_element_by_id("element_id")
         Needs be replaced with:
-        element = driver.find_element(By.ID, "element_id")
+        element = driver.find_element("xpath",By.ID, "element_id")
 
         Using name:
         element = find_element_by_name("element_name")
         Needs be replaced with:
-        element = driver.find_element(By.NAME, "element_name")
+        element = driver.find_element("xpath",By.NAME, "element_name")
 
         Using link_text:
         element = find_element_by_link_text("element_link_text")
         Needs be replaced with:
-        element = driver.find_element(By.LINK_TEXT, "element_link_text")
+        element = driver.find_element("xpath",By.LINK_TEXT, "element_link_text")
 
         Using partial_link_text:
         element = find_element_by_partial_link_text("element_partial_link_text")
         Needs be replaced with:
-        element = driver.find_element(By.PARTIAL_LINK_TEXT, "element_partial_link_text")
+        element = driver.find_element("xpath",By.PARTIAL_LINK_TEXT, "element_partial_link_text")
 
         Using tag_name:
         element = find_element_by_tag_name("element_tag_name")
         Needs be replaced with:
-        element = driver.find_element(By.TAG_NAME, "element_tag_name")
+        element = driver.find_element("xpath",By.TAG_NAME, "element_tag_name")
 
         Using css_selector:
         element = find_element_by_css_selector("element_css_selector")
         Needs be replaced with:
-        element = driver.find_element(By.CSS_SELECTOR, "element_css_selector")
+        element = driver.find_element("xpath",By.CSS_SELECTOR, "element_css_selector")
 
         Using xpath:
-        element = find_element_by_xpath("element_xpath")
+        element = find_element("element_xpath")
         Needs be replaced with:
-        element = driver.find_element(By.XPATH, "element_xpath")    
+        element = driver.find_element("xpath",By.XPATH, "element_xpath")    
         '''

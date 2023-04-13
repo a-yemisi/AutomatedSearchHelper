@@ -24,12 +24,12 @@
                         {% if display_data['is_ignored'] %}
                             <a class="waves-effect waves-light btn grey"
                                href="{{url_for("main.toggle_ignored", doi_id = display_data['doi_id'])}}">
-                               Remove ignored
+                               Remove pending
                             </a>
                         {% else %}
                             <a class="waves-effect waves-light btn grey darken-2"
                                href="{{url_for("main.toggle_ignored", doi_id = display_data['doi_id'])}}">
-                               Mark ignored
+                               Pending
                             </a>
                         {% endif %}
 

@@ -29,7 +29,7 @@ class ACMArticlesHandler:
                 dict(sentences=format_text_and_split_into_sentences(
                     par.get_attribute('innerHTML'))) for par in abstract_paragraphs])]
         except:
-            self.__logger.warning("Could not read abstract for " + url)
+            self.__logger.warning(" for " + url)
 
         result = ArticleData(publisher_link=url, text=text, read_status='Full text not avaliable')
 

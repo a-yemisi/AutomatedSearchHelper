@@ -16,6 +16,7 @@ def get_abstract(soap):
         logging.debug("Abstract read correctly")
     else:
         logging.warning('Could not read abstract')
+        print("ABSTRACT TEXT:", abstract_text)
     return dict(title='Abstract', paragraphs=[dict(sentences=format_text_and_split_into_sentences(abstract_text))])
 
 

@@ -20,6 +20,7 @@ from AutomatedSearchHelperUtilities.getDoiFilename import getDoiFilename, doi_to
 from ArticlesDataDownloader.RefworksDataDownloader import RefworksDataDownloader
 from ArticlesDataDownloader.pdfs.extract_text_from_pdf import read_pdf_as_json
 
+from ArticlesServer.directories import OUTPUT_DIRECTORY
 
 class ArticlesDataDownloader:
     ##AKA_Feb22: print to test
@@ -198,13 +199,22 @@ class ArticlesDataDownloader:
         if article_data.doi and (not article_data.title or not article_data.authors):
             article_data.merge(self.__refworks_downloader.get_data(article_data.doi))
 
+
+#Problem function
     def __try_to_merge_article_data_from_pdf(self, article_data, pdf_filename):
         try:
+            print("See if the function works",read_pdf_as_json(pdf_filename))
+        except Exception as e:
+            print("The exception to the read_pdf_as_json function:", e)
+        try:
             article_data.merge(ArticleData(text=read_pdf_as_json(pdf_filename)))
+            print("text, ArticlesDataDownloader =", read_pdf_as_json(pdf_filename))
+            print("PDFFILENAEM:", pdf_filename)
             article_data.read_status = 'OK - PDF READ'
         except Exception as e:
             self.__logger.warning('Failed to read article data from pdf ' + pdf_filename)
             self.__logger.exception(e)
+            print("Exception:",e)
             article_data.read_status = 'Failed reading pdf data'
 
     def load_archived_article_data(self, article_data):
@@ -219,24 +229,45 @@ class ArticlesDataDownloader:
 
         return None, None
 
-
+#YEB: Yemisi's Edit Begins
+#EOYE: End Of Yemisi's Edit
     def read_article(self, article_data):
+        #YEB
+        print("Article_data:", article_data)
+        print("ARTICLE DATA.FILENAMEBASE", article_data.filename_base)
+        print("ARTICLE DATA DOI", article_data.doi)
+        print("ARTICLES DATA STATUS, line 234", article_data.read_status)
+        #EOYE
         if not article_data.filename_base and article_data.doi:
+            #YEB
+            print("Line 228 ArticlesDataDownloader works!!")
+            #EOYE
             article_data.filename_base = doi_to_filename_base(article_data.doi)
+            #YEB
+            print("Line 239 worked", doi_to_filename_base(article_data.doi))
+
+            #EOYE
 
         if article_data.filename_base:
             old_file_data = self.__try_to_read_old_file(article_data.filename_base)
+            print("OLD-FILE-DATA", old_file_data)
             if old_file_data:
+                #YEB
+                print("It tried to read from old-file-data")
+                #EOYE
                 self.__logger.info('Successfully read old file ' + old_file_data[0])
                 return old_file_data
         else:
             article_data.read_status ='Cannot handle article withou doi or publisher link'
             return None, article_data
-
+        print("ARTICLES DATA STATUS, line 262", article_data.read_status)
         if not article_data.publisher_link and article_data.doi:
             self.__logger.info('Trying to get publisher link <1> from ' + article_data.doi)
             article_data.publisher_link = getLinkFromDoi(article_data.doi)
             self.__logger.info('got publisher link ' + article_data.publisher_link)
+            #YEB
+            print("It got publisher link. The publisher link is", article_data.publisher_link)
+            #EOYE
 
         if not article_data.publisher_link and article_data.scopus_link:
             self.__logger.info('Trying to get scopus data from ' + article_data.scopus_link)
@@ -249,7 +280,7 @@ class ArticlesDataDownloader:
         pdf_filename = str()
 
         clear_download_directory()
-
+        print("ARTICLES DATA STATUS, line 282", article_data.read_status)
         self.__logger.info('Finding handler for ' + article_data.publisher_link)
         if article_data.publisher_link:
             for handler in self.get_handlers():
@@ -259,7 +290,16 @@ class ArticlesDataDownloader:
                         try:
                             self.__logger.info("Link will be handled by " + handler.name())
                             article_data.merge(handler.get_article(article_data.publisher_link))
+                            #YEB
                             pdf_filename = handler.download_pdf(article_data.publisher_link)
+                            filename_and_path = "\\" + article_data.filename_base + ".pdf"
+                            print("Filename_and_PATH:",filename_and_path)
+                            #pdf_filename = OUTPUT_DIRECTORY + filename_and_path
+                            print("SERVER FILES DIRECTORY", OUTPUT_DIRECTORY)
+                            # print("New pdf_filename:", pdf_filename_another)
+                            print("PDFFILENAME:", pdf_filename)
+                            print("ARTICLE_DATA_READ_STATUS, Line 295:", article_data.read_status)
+                            #EOYE
                             if article_data.read_status != 'OK':
                                 if pdf_filename:
                                     self.__try_to_merge_article_data_from_pdf(article_data, pdf_filename)
@@ -270,7 +310,7 @@ class ArticlesDataDownloader:
                         except Exception as e:
                             self.__logger.warning("Failed to read " + article_data.publisher_link
                                                   + " try " + str(try_count+1) + '/3')
-                            self.__logger.exception(e)
+                            self.__logger.exception("Exception in line 277,",e)
                             pdf_filename = str()
                     else:
                         article_data.read_status = 'Failed to read data from publisher'

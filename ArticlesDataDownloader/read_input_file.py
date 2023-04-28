@@ -14,6 +14,7 @@ def read_input_file(filepath, source_type):
     elif source_type == InputSourceType.IEEE_CSV:
         return read_ieee_csv(filepath)
     elif source_type == InputSourceType.SCIENCE_DIRECT_RIS:
+        #Check it out
         return read_science_direct_ris(filepath)
     elif source_type == InputSourceType.WILLEY_RIS:
         return read_willey_ris(filepath)

@@ -87,6 +87,9 @@ class SpringerArticlesHandler():
                 download_pdf_button = WebDriverWait(self.driver, 10).until(
                     lambda x: x.find_element("xpath","//a[contains(@data-track-action, 'Pdf download')]"))
                 pdf_link = download_pdf_button.get_attribute('href')
+                #YEB
+                print("LINKK:", download_file_from_link_that_initiates_download(self.driver, pdf_link))
+                #EOYB
                 return download_file_from_link_that_initiates_download(self.driver, pdf_link)
             elif '/article' in self.driver.current_url:
                 self.__logger.info('Trying to get pdf from chapter')

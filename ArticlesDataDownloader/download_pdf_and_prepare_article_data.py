@@ -16,6 +16,7 @@ def download_pdf_and_prepare_article_data(
         download_file_from_link_to_path(driver, pdf_link, output_filename)
         result_reading = ArticleData(text=read_pdf_as_json(output_filename))
     except Exception as error:
+        print("exception download_pdf_and_prepare_article_data", error)
         if should_clear_file and os.path.isfile(output_filename):
             os.remove(output_filename)
         return None

@@ -90,6 +90,7 @@ class ArticlesDatabase:
                 print(file_path + " not found. ")
 
     def get_full_article(self, article_id):
+        # print(self._articles[article_id])
         return self._articles[article_id]
 
     def get_next_article(self, article_id):
@@ -130,14 +131,38 @@ class ArticlesDatabase:
         return self._invalid_dois
 
     def get_all_articles_short_info(self, user):
-        return [{'id': article_id,
+        to_return = []
+        # status_dict = {Status.ACCEPTED:ArticleStatus.ACCEPTED, Status.DECLINED:ArticleStatus.DECLINED, Status.PENDING:ArticleStatus.PENDING}
+        for article_id, article_data in self._articles.items():
+            statuses = self.get_statuses(article_id, user)
+            users, status_needed = statuses[0]
+            # print("Statuses (line 135 ArticlesDatabase.py):", type(status_needed))
+            # print("Status is:", status_needed)
+            # print("Article Status:", article_data.status)
+            overall_status = None
+            if status_needed == Status.ACCEPTED:
+                overall_status = ArticleStatus.ACCEPTED
+                # print("Overall Status:", overall_status)
+            elif status_needed == Status.DECLINED:
+                overall_status = ArticleStatus.DECLINED
+                # print("Overall Status:", overall_status)
+            elif status_needed == Status.PENDING:
+                overall_status = ArticleStatus.PENDING
+                # print("Overall Status:", overall_status)
+            else:
+                overall_status = article_data.status
+                # print("Overall Status:", overall_status)
+            # print("Overall Status:", overall_status)
+            to_send = {'id': article_id,
                 'title': article_data.title,
                 'doi': article_data.doi,
-                'article_status': article_data.status,
+                'article_status': overall_status,
                 'publisher' : article_data.publisher,
                 'read_error': article_data.read_error if article_data.read_error else str(),
-                'statuses': self.get_statuses(article_id, user)} for article_id, article_data in self._articles.items()]
-
+                'statuses': self.get_statuses(article_id, user)}
+            to_return.append(to_send)
+        return to_return
+    
     def get_comments(self, article_id):
         return self._comments[article_id]
 

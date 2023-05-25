@@ -24,12 +24,12 @@
                         {% if display_data['is_ignored'] %}
                             <a class="waves-effect waves-light btn grey"
                                href="{{url_for("main.toggle_ignored", doi_id = display_data['doi_id'])}}">
-                               Remove pending
+                               Remove Ignored
                             </a>
                         {% else %}
                             <a class="waves-effect waves-light btn grey darken-2"
                                href="{{url_for("main.toggle_ignored", doi_id = display_data['doi_id'])}}">
-                               Pending
+                               Ignored
                             </a>
                         {% endif %}
 
@@ -107,17 +107,17 @@
                    {% if session['user'] %}
                         <div class="row">
                                 <a class="waves-effect waves-light btn yellow darken-2"
-                                    href="{{url_for("main.change_status", doi_id = display_data['doi_id'], status = 1)}}">
+                                    href="{{url_for("main.toggle_statuses", doi_id = display_data['doi_id'], status = 1)}}">
                                     Reset
                                 </a>
 
                                 <a class="waves-effect waves-light btn green"
-                                    href="{{url_for("main.change_status", doi_id = display_data['doi_id'], status = 2)}}">
+                                    href="{{url_for("main.toggle_statuses", doi_id = display_data['doi_id'], status = 2)}}">
                                     Accept
                                 </a>
 
                                 <a class="waves-effect waves-light btn red"
-                                   href="{{url_for("main.change_status", doi_id = display_data['doi_id'], status = 3)}}">
+                                   href="{{url_for("main.toggle_statuses", doi_id = display_data['doi_id'], status = 3)}}">
                                    Reject
                                 </a>
                         </div>

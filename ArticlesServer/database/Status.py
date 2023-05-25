@@ -5,3 +5,4 @@ class Status(IntEnum):
     TO_BE_CHECKED = 1
     ACCEPTED = 2
     DECLINED = 3
+    PENDING = 4

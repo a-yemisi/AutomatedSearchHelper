@@ -1,8 +1,11 @@
 import os
 
 from ArticlesDataDownloader.ArticleData import ArticleData
+# from ArticlesDatabase import ArticlesDatabase
 from ArticlesServer.directories import OUTPUT_DIRECTORY
 from .ArticleStatus import ArticleStatus
+from ArticlesServer import main
+from .Status import Status
 
 
 class ArticleDataWithFindings:
@@ -115,7 +118,7 @@ class ArticleDataWithFindings:
             elif self.read_status == 'No access or PDF not available':
                 return ArticleStatus.NO_ACCESS_TO_ARTICLE
             else:
-                return ArticleStatus.READ_PARTIAL_ERROR_READING_NO_FINDINGS
+                return ArticleStatus.READ_PARTIAL_ERROR_READING_NO_FINDINGS        
 
     @property
     def search_base(self):

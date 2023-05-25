@@ -28,8 +28,13 @@ from flask import make_response
 main = Blueprint('main', __name__)
 
 
+
+
+status_needed = []
+
 @main.route('/')
 def index():
+    global db
     db = DatabaseManager.get_instance()
 
     user = None
@@ -119,8 +124,9 @@ def prepare_comments(db, doi_id):
              user_name=get_user_database().get_full_name(c['user']),
              can_delete=can_remove_comment(c['user'])) for c in db.get_comments(doi_id)]
 
-
-def prepare_statuses(db, doi_id):
+# BOYE 05/05/23
+def statuses(db, doi_id):
+# EOYE 05/05/23
     if session.get('user', None):
         return db.get_statuses(doi_id, session['user']['login'])
     return db.get_statuses(doi_id)
@@ -128,10 +134,22 @@ def prepare_statuses(db, doi_id):
 
 def generate_data_doi_data(db, doi_id):
     article_data = db.get_full_article(doi_id)
-    return {
+    user_status = statuses(db, doi_id)
+    users, status_needed = user_status[0]
+    overall_status = None
+    if status_needed == Status.ACCEPTED:
+        overall_status = ArticleStatus.ACCEPTED
+    elif status_needed == Status.DECLINED:
+        overall_status = ArticleStatus.DECLINED
+    elif status_needed == Status.PENDING:
+        overall_status = ArticleStatus.PENDING
+    else:
+        overall_status = article_data.status
+    # print("Overall Status:", overall_status)
+    generated_data_doi = {
         'doi_id': doi_id,
         'comments': prepare_comments(db, doi_id),
-        'statuses': prepare_statuses(db, doi_id),
+        'statuses': statuses(db, doi_id),
         'title': article_data.title,
         'doi': article_data.doi,
         'issn': article_data.issn,
@@ -143,10 +161,12 @@ def generate_data_doi_data(db, doi_id):
         'scopus_link': article_data.scopus_link,
         'doi_link': article_data.doi_link,
         'read_error': article_data.read_error,
-        'status' : article_data.status,
+        'status' : overall_status,
         'is_ignored': (article_data.status == ArticleStatus.ARTICLE_IGNORED),
         'has_pdf': article_data.get_pdf_filename() is not None,
-        'sections': prepare_sections(article_data)}
+        'sections': prepare_sections(article_data)
+    }
+    return generated_data_doi
 
 
 class CommentForm(FlaskForm):
@@ -208,28 +228,64 @@ def prev_doi(doi_id):
     else:
         return redirect(url_for('main.index'))
 
-
-@main.route('/status/<string:doi_id>')
-def change_status(doi_id):
-    status = request.args.get('status')
+# BOYE 05/05/23 - Beginning of Yemisi's Edit
+@main.route('/toggle_statuses/<string:doi_id>')
+def toggle_statuses(doi_id):
+    # status = request.args.get('status')
+    # EOYE 05/05/23 - End of Yemisi's Edit
     db = DatabaseManager.get_instance()
     if not db:
         return redirect(url_for('main.index'))
-
+    
     user = session['user']
-
     if not user:
         flash('Cannot change status without being logged in')
         return redirect(url_for('main.login'))
+    
+    # BOYE 05/05/23
+    status = request.args.get('status')
+    status_needed.clear()
+    status_needed.append(status)
+    
+    # EOYE 05/05/23
 
     if status == '1':
         db.change_status(doi_id, user['login'], Status.TO_BE_CHECKED)
+        # print("For confirming", doi_id)
     elif status == '2':
         db.change_status(doi_id, user['login'],  Status.ACCEPTED)
     elif status == '3':
         db.change_status(doi_id, user['login'],  Status.DECLINED)
-
+    # test_status = statuses(db, doi_id)
+    # print("Status from toggle status function:", test_status)
     return redirect(url_for('main.view_doi', doi_id=doi_id))
+
+
+def return_mini_status():
+    # db = DatabaseManager.get_instance()
+    # if not db:
+    #     return redirect(url_for('main.index'))
+
+    # user = session['user']
+    # if not user:
+    #     flash('Cannot change status without being logged in')
+    #     return redirect(url_for('main.login'))
+    
+    # if mini_status == None:
+    #     return 1
+    # else:
+    #     if mini_status[0][1] == "Status.TO_BE_CHECKED":
+    #         return 1
+    #     elif mini_status[0][1] == "Status.ACCEPTED":
+    #         return 2
+    #     elif mini_status[0][1] == "Status.DECLINED":
+    #         return 3
+    if len(status_needed) == 0:
+        print("Status is empty")
+        return None
+    mini_status = status_needed[-1]
+    return mini_status
+
 
 @main.route('/toggle_ignored/<string:doi_id>')
 def toggle_ignored(doi_id):

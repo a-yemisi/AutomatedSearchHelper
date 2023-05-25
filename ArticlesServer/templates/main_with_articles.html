@@ -28,6 +28,7 @@ tr.shown td.details-control {
             <a id="IgnoredButton"> Ignored </a>
             <a id="AcceptedButton"> Accepted </a>
             <a id="RejectedButton"> Rejected </a>
+            <a id="ToBeCheckedButton"> To be checked </a>
             <a id="PendingButton"> Pending </a>
           </caption>
         <thead>
@@ -37,7 +38,7 @@ tr.shown td.details-control {
             <th>Title</th>
             <th>Publisher</th>
             <th>Article Status</th>
-            <th>Read Error</th>
+            <th>Status Message</th>
           </tr>
         </thead>
         <tbody>
@@ -65,24 +66,34 @@ tr.shown td.details-control {
           }
 
         var articlesData = {{ articles|tojson }};
-
+        // var pass_on = '9';
         articlesData = articlesData.map(function (data) {
              data.statuses = data.statuses.map(
                     function (statusData) {
                         var result = '';
-                        if (statusData[1] == 1)
+                        if (statusData[1] == 1)  {
+                            // pass_on = '12';
                             result+= '<a class="waves-light btn-small yellow">To be checked';
-                        else if (statusData[1] == 2)
+                    }   else if (statusData[1] == 2)   {
+                            // pass_on = '9';
                             result+= '<a class="waves-light btn-small green">Accepted'
-                        else
+                    }
+                        else if (statusData[1] == 3)   {
+                            // pass_on = '10';
                             result+= '<a class="waves-light btn-small red">Rejected'
+                    }
+                        else if (statusData[1] == 4)  {
+                            // pass_on = '11';    
+                            result+= '<a class="waves-light btn grey darken-1">Pending'  }
                         result += '<div class="chip">' + statusData[0]+ '</div></a>'
                         return result;
-                    }
+                    
+                }
                 ).join(' ');
                 return data;
         });
-
+        
+        var articleStatusEdited
         $.fn.dataTable.ext.order['articleStatus'] = function  ( settings, col )
         {
             return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
@@ -92,6 +103,15 @@ tr.shown td.details-control {
         $.fn.dataTable.ext.search.push(
             function( settings, data, dataIndex ) {
                 var rowStatus = articlesData[dataIndex].article_status;
+            //     if (pass_on == '12') {
+            //         rowStatus = articlesData[dataIndex].article_status;
+            // }   else if (pass_on == '9') {
+            //         rowStatus = pass_on;
+            // }   else if (pass_on == '10') {
+            //         rowStatus = pass_on;
+            // }   else if (pass_on == '11') {
+            //         rowStatus = pass_on;
+            //     }
 
                 for (status in ArticleStatusMap)
                 {
@@ -171,10 +191,10 @@ tr.shown td.details-control {
                 var button = $('#'+info.id_string);
                 button.attr("class", info.class_enabled);
                 button.on('click', function () {
-                    if (this.className == info.class_enabled)
-                        this.className = info.class_disabled;
-                    else
+                    if (this.className == info.class_disabled)
                         this.className = info.class_enabled;
+                    else
+                        this.className = info.class_disabled;
                     table.draw()
                 });
             }

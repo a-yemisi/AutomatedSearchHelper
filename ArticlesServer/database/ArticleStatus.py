@@ -12,5 +12,6 @@ class ArticleStatus(IntEnum):
     ARTICLE_IGNORED = 8,
     ACCEPTED = 9,
     DECLINED = 10,
-    PENDING = 11
+    PENDING = 11,
+    TO_BE_CHECKED = 12
 

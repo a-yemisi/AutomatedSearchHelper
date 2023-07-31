@@ -139,12 +139,16 @@ def generate_data_doi_data(db, doi_id):
     overall_status = None
     if status_needed == Status.ACCEPTED:
         overall_status = ArticleStatus.ACCEPTED
+        read_error = "Accepted"
     elif status_needed == Status.DECLINED:
         overall_status = ArticleStatus.DECLINED
+        read_error = "Declined"
     elif status_needed == Status.PENDING:
         overall_status = ArticleStatus.PENDING
+        read_error = "Pending"
     else:
         overall_status = article_data.status
+        read_error = article_data.read_error
     # print("Overall Status:", overall_status)
     generated_data_doi = {
         'doi_id': doi_id,
@@ -160,7 +164,7 @@ def generate_data_doi_data(db, doi_id):
         'authors': article_data.authors,
         'scopus_link': article_data.scopus_link,
         'doi_link': article_data.doi_link,
-        'read_error': article_data.read_error,
+        'read_error': read_error,
         'status' : overall_status,
         'is_ignored': (article_data.status == ArticleStatus.ARTICLE_IGNORED),
         'has_pdf': article_data.get_pdf_filename() is not None,
@@ -256,6 +260,8 @@ def toggle_statuses(doi_id):
         db.change_status(doi_id, user['login'],  Status.ACCEPTED)
     elif status == '3':
         db.change_status(doi_id, user['login'],  Status.DECLINED)
+    elif status == '4':
+        db.change_status(doi_id, user['login'],  Status.PENDING)
     # test_status = statuses(db, doi_id)
     # print("Status from toggle status function:", test_status)
     return redirect(url_for('main.view_doi', doi_id=doi_id))

@@ -98,6 +98,8 @@
                             <a class="waves-light btn-small green">Accepted
                         {% elif status.value == 3 %}
                             <a class="waves-light btn-small red">Rejected
+                        {% elif status.value == 4 %}
+                                <a class="waves-light btn grey darken-1">For Pending
                         {% endif %}
                     <div class="chip"> {{ user }} </div>
                     </a>
@@ -119,6 +121,10 @@
                                 <a class="waves-effect waves-light btn red"
                                    href="{{url_for("main.toggle_statuses", doi_id = display_data['doi_id'], status = 3)}}">
                                    Reject
+                                </a>
+                                <a class="waves-light btn grey darken-1"
+                                   href="{{url_for("main.toggle_statuses", doi_id = display_data['doi_id'], status = 4)}}">
+                                   Pending
                                 </a>
                         </div>
                    {% endif %}

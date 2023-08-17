@@ -1,0 +1,3 @@
+#FullWithFindingsButton, #PartialWithFindingsButton, #PartialWithoutFindingsErrorReadingButton, #PartialWithoutFindingsPublisherNotSupportedButton, #NoAccessToArticleButton, #FullPDFWithoutFindingsButton, #FullWithoutFindingsButton, #IgnoredButton, #AcceptedButton, #RejectedButton, #ToBeCheckedButton, #MaybeButton {
+    margin-bottom: 5px;
+    }

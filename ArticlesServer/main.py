@@ -134,6 +134,8 @@ def statuses(db, doi_id):
 
 def generate_data_doi_data(db, doi_id):
     article_data = db.get_full_article(doi_id)
+    # Chenges made by Yemisi, 22nd May, 2023.
+    # A conditon statement to set ArticleStatus to it equivalent of Status.
     user_status = statuses(db, doi_id)
     users, status_needed = user_status[0]
     overall_status = None
@@ -143,9 +145,9 @@ def generate_data_doi_data(db, doi_id):
     elif status_needed == Status.DECLINED:
         overall_status = ArticleStatus.DECLINED
         read_error = "Declined"
-    elif status_needed == Status.PENDING:
-        overall_status = ArticleStatus.PENDING
-        read_error = "Pending"
+    elif status_needed == Status.MAYBE:
+        overall_status = ArticleStatus.MAYBE
+        read_error = "Maybe"
     else:
         overall_status = article_data.status
         read_error = article_data.read_error
@@ -165,11 +167,14 @@ def generate_data_doi_data(db, doi_id):
         'scopus_link': article_data.scopus_link,
         'doi_link': article_data.doi_link,
         'read_error': read_error,
-        'status' : overall_status,
+        'status' : overall_status, #This is where the value of status was changed
         'is_ignored': (article_data.status == ArticleStatus.ARTICLE_IGNORED),
         'has_pdf': article_data.get_pdf_filename() is not None,
         'sections': prepare_sections(article_data)
     }
+    
+    # The value of the status is changed to the value set by the condition from line 142-153
+    # End of changes
     return generated_data_doi
 
 
@@ -232,6 +237,8 @@ def prev_doi(doi_id):
     else:
         return redirect(url_for('main.index'))
 
+# Trying to get user status here to pass it on to the return_mini_status function.
+# The user status passed is in the variable name 'status_needed'
 # BOYE 05/05/23 - Beginning of Yemisi's Edit
 @main.route('/toggle_statuses/<string:doi_id>')
 def toggle_statuses(doi_id):
@@ -246,10 +253,11 @@ def toggle_statuses(doi_id):
         flash('Cannot change status without being logged in')
         return redirect(url_for('main.login'))
     
+    # Yemisi's edit, 5th - 22nd May, 2023
     # BOYE 05/05/23
     status = request.args.get('status')
-    status_needed.clear()
-    status_needed.append(status)
+    # status_needed.clear()
+    # status_needed.append(status)
     
     # EOYE 05/05/23
 
@@ -261,13 +269,15 @@ def toggle_statuses(doi_id):
     elif status == '3':
         db.change_status(doi_id, user['login'],  Status.DECLINED)
     elif status == '4':
-        db.change_status(doi_id, user['login'],  Status.PENDING)
+        db.change_status(doi_id, user['login'],  Status.MAYBE)
     # test_status = statuses(db, doi_id)
     # print("Status from toggle status function:", test_status)
     return redirect(url_for('main.view_doi', doi_id=doi_id))
 
-
-def return_mini_status():
+# This function does not work, therefore has been commented out. 
+# It's purpose was to store User Status and pass it when needed. 
+# However, the database does this so this function is therefore useless.
+# def return_mini_status():
     # db = DatabaseManager.get_instance()
     # if not db:
     #     return redirect(url_for('main.index'))
@@ -286,12 +296,12 @@ def return_mini_status():
     #         return 2
     #     elif mini_status[0][1] == "Status.DECLINED":
     #         return 3
-    if len(status_needed) == 0:
-        print("Status is empty")
-        return None
-    mini_status = status_needed[-1]
-    return mini_status
-
+    # if len(status_needed) == 0:
+    #     print("Status is empty")
+    #     return None
+    # mini_status = status_needed[-1]
+    # return mini_status
+# End of Yemisi's edit
 
 @main.route('/toggle_ignored/<string:doi_id>')
 def toggle_ignored(doi_id):

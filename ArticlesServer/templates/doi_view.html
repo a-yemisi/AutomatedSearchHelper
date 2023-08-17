@@ -98,8 +98,13 @@
                             <a class="waves-light btn-small green">Accepted
                         {% elif status.value == 3 %}
                             <a class="waves-light btn-small red">Rejected
+                                <!--
+                                13th April, 2023. Changes made by Yemisi 
+                                Added label for Extended Status: Maybe
+                                -->
                         {% elif status.value == 4 %}
-                                <a class="waves-light btn grey darken-1">For Pending
+                                <a class="waves-light btn grey darken-1">Maybe
+                                <!-- End of changes -->
                         {% endif %}
                     <div class="chip"> {{ user }} </div>
                     </a>
@@ -122,10 +127,13 @@
                                    href="{{url_for("main.toggle_statuses", doi_id = display_data['doi_id'], status = 3)}}">
                                    Reject
                                 </a>
+                                <!-- 13th April, 2023. Changes done by Yemisi -->
+                                <!-- Added design for maybe label -->
                                 <a class="waves-light btn grey darken-1"
                                    href="{{url_for("main.toggle_statuses", doi_id = display_data['doi_id'], status = 4)}}">
-                                   Pending
+                                   Maybe
                                 </a>
+                                <!-- End of changes -->
                         </div>
                    {% endif %}
                     <ul class="collection">

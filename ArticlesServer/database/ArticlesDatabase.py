@@ -146,8 +146,8 @@ class ArticlesDatabase:
             elif status_needed == Status.DECLINED:
                 overall_status = ArticleStatus.DECLINED
                 # print("Overall Status:", overall_status)
-            elif status_needed == Status.PENDING:
-                overall_status = ArticleStatus.PENDING
+            elif status_needed == Status.MAYBE:
+                overall_status = ArticleStatus.MAYBE
                 # print("Overall Status:", overall_status)
             else:
                 overall_status = article_data.status
